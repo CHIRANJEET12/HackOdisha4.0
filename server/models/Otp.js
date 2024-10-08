@@ -1,11 +1,27 @@
 import mongoose from 'mongoose';
 
-const OtpSchema = new mongoose.Schema({
-    buyer: { type: Schema.Types.ObjectId, ref: 'User' },
-    seller: { type: Schema.Types.ObjectId, ref: 'User' },
-    otpBuyer: String,
-    otpSeller: String,
-    expiresAt: { type: Date, default: Date.now, expires: 300 }
-})
+const otpSchema = new mongoose.Schema({
+    otpSeller: {
+        type: String,
+        required: true, 
+    },
+    otpBuyer: {
+        type: String,
+        required: true, 
+    },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'User',
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+        expires: '5m' 
+    }
+});
 
-module.exports = mongoose.model('OTP', OtpSchema);
+const OTP = mongoose.model('OTP', otpSchema);
+
+
+export default OTP;

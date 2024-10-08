@@ -6,4 +6,4 @@ const router = express.Router();
 router.post('/generate', generateDeliveryOTP);
 router.post('/verify', verifyOTP);
 
-module.exports = router;
+export default router;

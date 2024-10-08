@@ -6,4 +6,4 @@ const router = express.Router();
 
 router.post('/post', authenticate, postProduct);
 
-module.exports = router;
+export default router;

@@ -20,9 +20,9 @@ mongoose.connect(mongoURI)
     .catch((err) => console.error('MongoDB connection error:', err));
 
 
-    app.use('/auth', authRoutes);
-    app.use('/products', productRoutes);
-    app.use('/otp', otpRoutes);
+    app.use('/api/auth', authRoutes);
+    app.use('/api/products', productRoutes);
+    app.use('/api/otp', otpRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port http://localhost:${PORT}`));

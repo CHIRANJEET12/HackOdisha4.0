@@ -1,25 +1,31 @@
-import twilio from 'twilio';  // Example if you are using Twilio for SMS
+import twilio from 'twilio';
+import dotenv from 'dotenv';
 
-// Example configuration for Twilio
-const accountSid = process.env.TWILIO_ACCOUNT_SID; // Add this to your .env file
-const authToken = process.env.TWILIO_AUTH_TOKEN;   // Add this to your .env file
-const client = twilio(accountSid, authToken);
+dotenv.config(); 
 
-// Function to generate a random OTP
+const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+
 export const generateOTP = () => {
-    return Math.floor(100000 + Math.random() * 900000).toString(); // Generates a 6-digit OTP
+    return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
-// Function to send OTP via SMS
-export const sendOTP = async (phoneNumber, otp) => {
+export const sendOTP = async (to, otp) => {
+    if (!to) {
+        throw new Error('The "to" parameter is required to send the OTP.');
+    }
+    if (!otp) {
+        throw new Error('The "otp" parameter is required to send the OTP.');
+    }
+
     try {
-        await client.messages.create({
+        const message = await twilioClient.messages.create({
             body: `Your OTP is: ${otp}`,
-            from: process.env.TWILIO_PHONE_NUMBER, // Your Twilio phone number
-            to: phoneNumber
+            from: process.env.TWILIO_PHONE_NUMBER, 
+            to: to, 
         });
-        console.log(`OTP sent to ${phoneNumber}`);
+        return message;
     } catch (error) {
-        console.error('Error sending OTP:', error);
+        console.error('Error sending OTP:', error.message); 
+        throw new Error('Failed to send OTP');
     }
 };

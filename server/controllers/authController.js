@@ -2,13 +2,13 @@ import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
-exports.register = async(req,res)=>{
-    const { name, email, password, role, adharNo, licenseNo } = req.body;
+export const register = async(req,res)=>{
+    const { name, email, password, role, adharNo, licenseNo, phone } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
 
     try{
         const user = new User({
-            name, email, password: hashedPassword, role, adharNo, licenseNo
+            name, email, password: hashedPassword, role, adharNo, licenseNo, phone
         });
         await user.save();
         res.status(201).json({ message: 'User registered successfully' });
@@ -18,7 +18,7 @@ exports.register = async(req,res)=>{
 };
 
 
-exports.login = async (req, res) => {
+export const login = async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });

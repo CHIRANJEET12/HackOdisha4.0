@@ -1,7 +1,7 @@
 import Product from '../models/Product.js';
 import User from '../models/User.js';
 
-exports.postProduct = async (req, res) => {
+export const postProduct = async (req, res) => {
     const { name, description, price, location } = req.body;
     const sellerId = req.user.userId;
 

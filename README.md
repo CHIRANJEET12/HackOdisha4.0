@@ -15,4 +15,9 @@ during delivery(OTP)
 Product catalogue
 
 After posting about a product , a notification will be sent to all the near by 
-buyers 
+buyer
+
+
+
+
+
