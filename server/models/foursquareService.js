@@ -1,22 +1,23 @@
-// Foursquare API credentials
-import env from "dotenv"
-const API_KEY = process.env.REACT_APP_FOURSQUARE_API_KEY;  // Replace this with your actual Foursquare API key
+const API_KEY = 'fsq3PqXDRuopgpm52LRbrkIS1Gak7ex7kFLzmxJ6hcYk6HA';  
 
-// Function to search for nearby shops (e.g., bookstores)
-export const getNearbyShops = async (latitude, longitude) => {
-  const url = `https://api.foursquare.com/v3/places/search?ll=${latitude},${longitude}&query=bookstore`;
+if (!API_KEY) {
+  throw new Error("Foursquare API key is missing.");
+}
+
+export const getNearbyShops = async (latitude, longitude, radius) => {
+  const url = `https://api.foursquare.com/v3/places/search?ll=${latitude},${longitude}&radius=${radius}&query=bookstore`;
 
   try {
     const response = await fetch(url, {
       method: 'GET',
       headers: {
-        'Authorization': API_KEY,
+        'Authorization': `Bearer ${API_KEY}`,  // Correct format for Foursquare API
         'Content-Type': 'application/json',
       }
     });
 
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error(`Network response was not ok: ${response.statusText}`);
     }
 
     const data = await response.json();
@@ -26,3 +27,4 @@ export const getNearbyShops = async (latitude, longitude) => {
     throw error;
   }
 };
+
