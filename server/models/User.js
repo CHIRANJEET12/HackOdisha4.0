@@ -14,9 +14,9 @@ const SellerSchema = new Schema({
     required: true,
     unique: true,
   },
-  password: {
+  address: { // Added address field
     type: String,
-    required: true,
+    required: true, // Assuming address is required, modify if necessary
   },
   adharNo: {
     type: String,

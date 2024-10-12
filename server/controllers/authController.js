@@ -12,15 +12,14 @@ dotenv.config();
 const router = express.Router();
 
 export const registerSeller =  async (req, res) => {
-    const { name, email, password, adharNo, licenseNo, phone, bankDetails } = req.body;
+    const { name, email, address, adharNo, licenseNo, phone, bankDetails } = req.body;
 
-    const hashedPassword = await bcrypt.hash(password, 10);
 
     try {
         const seller = new User({
             name,
             email,
-            password: hashedPassword,
+            address,
             adharNo,
             licenseNo,
             phone,
@@ -43,7 +42,7 @@ export const registerSeller =  async (req, res) => {
 };
 
 export const registerBuyer = async (req, res) => {
-    const { name, email, password, adharNo, phone, shopnm, location } = req.body;
+    const { name, email, password, adharNo, phone, shopnm, address } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
 
     try {
@@ -54,7 +53,7 @@ export const registerBuyer = async (req, res) => {
             adharNo,
             phone,
             shopnm,
-            location
+            address
         });
         await buyer.save();
         res.status(201).json({ message: 'Buyer registered successfully' });

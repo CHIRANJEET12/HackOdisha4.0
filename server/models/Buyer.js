@@ -7,8 +7,7 @@ const BuyerSchema = new Schema({
     shopnm: { type: String },
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
-    role: { type: String, default: 'buyer', immutable: true },
-    location: { type: String, required: true },
+    address: { type: String, required: true },
     phone: {
         type: String,
         validate: {

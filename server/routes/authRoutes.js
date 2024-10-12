@@ -3,9 +3,9 @@ import { registerSeller, registerBuyer, registerDriver, login } from '../control
 
 const router = express.Router();
 
-router.post('/register/seller', registerSeller);
-router.post('/register/buyer', registerBuyer);
-router.post('/register/driver', registerDriver);
+router.post('/regSeller', registerSeller);
+router.post('/regBuyer', registerBuyer);
+router.post('/regDel', registerDriver);
 router.post('/login', login);
 
 export default router;
