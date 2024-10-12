@@ -1,0 +1,94 @@
+.form-container {
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 500px; /* Increased width to accommodate content */
+  margin: auto;
+  display: flex;
+  flex-direction: column; /* Ensure the form elements stack vertically */
+}
+
+.form-container.dark {
+  background-color: rgba(128, 128, 128, 0.8); 
+  color: #fff;
+  margin-top: 47px;
+}
+
+.form-container.light {
+  background-color: #f9f9f9;
+  color: #333;
+  margin-top: 47px;
+}
+
+.form-group {
+  margin-bottom: 20px; /* More margin between form groups */
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: inherit;
+  color: inherit;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #000;
+  outline: none;
+}
+
+/* Fix the overlapping issues by ensuring map has enough space */
+.map-container {
+  height: 300px;
+  width: 100%;
+  margin-top: 20px;
+  position: relative;
+  z-index: 1; /* Ensure map stays above other content */
+}
+
+.leaflet-container {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.submit-button {
+  padding: 10px 15px;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+
+.submit-button:hover {
+  background-color: #444;
+}
+
+.form-container.dark .submit-button {
+  background-color: #f9f9f9;
+  color: #000;
+}
+
+.form-container.dark ::placeholder{
+  color: #f9f9f9;
+}
+
+
+.error-message {
+  color: #ff6666;
+  margin-top: 5px;
+  font-size: 0.9em;
+}
