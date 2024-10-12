@@ -1,0 +1,44 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 20px; /* Add some space between the heading and cards */
+}
+
+.reg-opt-div {
+  display: flex;
+  flex-direction: row;
+  gap: 20px; 
+  justify-content: space-around;
+  width: 100%;
+  max-width: 800px; /* Restrict max width for better alignment */
+}
+
+/* Common styles for cards */
+.Reg-Card {
+  width: 300px;
+  height: 150px;
+  padding-top: 30px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  border-radius: 10px;
+  background-color: #fff; /* Light mode background */
+  color: #333; /* Light mode text color */
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.Reg-Card i{
+  margin-left: 6px;
+}
+
+/* Dark mode styles for cards */
+body.dark-mode .Reg-Card {
+  background-color: #444; /* Dark mode background */
+  color: #fff; /* Dark mode text color */
+}
+
