@@ -1,26 +1,89 @@
+// models/Seller.js
 import mongoose from 'mongoose';
+import { encryptData, decryptData } from '../utils/encryption.js'; // Import encryption functions
 
 const { Schema } = mongoose;
 
-const UserSchema = new Schema({
-    name: { type: String },
-    email: { type: String, unique: true },
-    password: { type: String },
-    role: { type: String, enum: ['buyer', 'seller', 'employee'], required: true },
-    adharNo: { type: String },
-    licenseNo: { type: String },
-    phone: {
-        type: String,
-        validate: {
-            validator: function(v) {
-                return /^[0-9]{10}$/.test(v); 
-            },
-            message: props => `${props.value} is not a valid phone number!`
-        },
-        required: [true, 'User phone number required']
-    }
+const SellerSchema = new Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  adharNo: {
+    type: String,
+    required: true,
+    select: false, // Exclude from queries
+  },
+  licenseNo: {
+    type: String,
+    required: true,
+    select: false, // Exclude from queries
+  },
+  phone: {
+    type: String,
+    required: true,
+  },
+  bankDetails: {
+    accountHolderName: {
+      type: String,
+      required: true,
+    },
+    bankAccountNumber: {
+      type: String,
+      required: true,
+      select: false, // This will exclude the field from queries by default
+    },
+    ifscCode: {
+      type: String,
+      required: true,
+    },
+    bankName: {
+      type: String,
+      required: true,
+    },
+    branchName: {
+      type: String,
+      required: true,
+    },
+    upiId: {
+      type: String,
+    },
+  },
+}, { timestamps: true });
+
+// Pre-save hook to encrypt sensitive information
+SellerSchema.pre('save', function (next) {
+  if (this.isModified('adharNo')) {
+    this.adharNo = encryptData(this.adharNo);
+  }
+  if (this.isModified('bankDetails.bankAccountNumber')) {
+    this.bankDetails.bankAccountNumber = encryptData(this.bankDetails.bankAccountNumber);
+  }
+  if (this.isModified('licenseNo')) {
+    this.licenseNo = encryptData(this.licenseNo);
+  }
+  next();
 });
 
-const User = mongoose.model('User', UserSchema);
+// Method to decrypt sensitive fields
+SellerSchema.methods.getDecryptedData = function () {
+  return {
+    ...this._doc,
+    adharNo: decryptData(this.adharNo),
+    bankAccountNumber: decryptData(this.bankDetails.bankAccountNumber),
+    licenseNo: decryptData(this.licenseNo),
+  };
+};
 
-export default User;
+const Seller = mongoose.model('Seller', SellerSchema);
+
+export default Seller;
