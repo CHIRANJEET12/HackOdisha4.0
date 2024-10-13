@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { useDarkMode } from '../components/DarkModeContext';
-import axios from 'axios'; // Import axios
+import axios from 'axios'; 
 import '../css/BuyerForm.css';
+import { useNavigate } from 'react-router-dom';
+
 
 export default function SellerForm() {
   const { darkMode } = useDarkMode();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -52,6 +55,9 @@ export default function SellerForm() {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/regSeller`, formData);
       console.log('Response:', response.data);
       alert("Success");
+      if(response.status === 200){
+        navigate('/User-Home-Page');  
+      }
     } catch (error) {
       console.error('Error submitting form:', error);
       setError(error.response ? error.response.data : 'An error occurred'); 

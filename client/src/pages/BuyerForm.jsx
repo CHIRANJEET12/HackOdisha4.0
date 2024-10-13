@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useDarkMode } from '../components/DarkModeContext';
-import axios from 'axios'; // Import axios
+import axios from 'axios'; 
+import { useNavigate } from 'react-router-dom';
 import '../css/BuyerForm.css';
 
 export default function BuyerForm() {
   const { darkMode } = useDarkMode();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     shopnm: '',     
@@ -33,6 +35,9 @@ export default function BuyerForm() {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/regBuyer`, formData);
       console.log('Response:', response.data);
       alert("success");
+      if(response.status === 200){
+        navigate('/User-Home-Page');  
+      }
     } catch (error) {
       console.error('Error submitting form:', error);
       setError(error.response ? error.response.data : 'An error occurred'); 
