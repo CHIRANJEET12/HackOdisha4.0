@@ -12,6 +12,7 @@ export default function DeliveryForm() {
     dob: '',
     contactNumber: '',
     email: '',
+    password: '',
     aadharNumber: '',
     panCard: '',
     photo: null,
@@ -51,9 +52,11 @@ export default function DeliveryForm() {
     try {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/regDel`, formData);
       console.log('Response:', response.data);
+      console.log('response: ', response.status);
       alert("success");
-      if(response.status === 200){
-        navigate('/User-Home-Page');  
+
+      if(response.status === 201){
+        navigate('/Userhomepage');  
       }
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -78,7 +81,7 @@ export default function DeliveryForm() {
             required
           />
         </div>
-        <div className="form-group">
+        {/* <div className="form-group">
           <label htmlFor="dob">Date of Birth:</label>
           <input
             type="date"
@@ -86,9 +89,8 @@ export default function DeliveryForm() {
             name="dob"
             value={formData.dob}
             onChange={handleChange}
-            required
           />
-        </div>
+        </div> */}
         <div className="form-group">
           <label htmlFor="contactNumber">Contact Number:</label>
           <input
@@ -107,6 +109,17 @@ export default function DeliveryForm() {
             id="email"
             name="email"
             value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="password">Password :</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value={formData.password}
             onChange={handleChange}
             required
           />
@@ -167,17 +180,19 @@ export default function DeliveryForm() {
             onChange={handleChange}
           />
         </div>
-        <div className="form-group">
-          <label htmlFor="proofOfAddress">Proof of Address:</label>
-          <input
-            type="file"
-            id="proofOfAddress"
-            name="proofOfAddress"
-            onChange={handleChange}
-            accept=".pdf,.jpg,.png"
-            required
-          />
-        </div>
+        {/* <div className="form-group">
+  <label htmlFor="proofOfAddress">Proof of Address:</label>
+  <input
+    type="file"
+    id="proofOfAddress"
+    name="proofOfAddress"
+    onChange={handleChange}
+    accept=".pdf,.jpg,.png"
+    required
+  />
+  <small>Accepted formats: .pdf, .jpg, .png</small>
+</div> */}
+
 
         <h2>Vehicle Details</h2>
         <div className="form-group">
@@ -256,7 +271,7 @@ export default function DeliveryForm() {
         </div>
 
         <h2>Emergency Contact</h2>
-        <div className="form-group">
+        {/* <div className="form-group">
           <label htmlFor="emergencyContactName">Name and Relationship:</label>
           <input
             type="text"
@@ -264,10 +279,9 @@ export default function DeliveryForm() {
             name="emergencyContactName"
             value={formData.emergencyContactName}
             onChange={handleChange}
-            required
           />
-        </div>
-        <div className="form-group">
+        </div> */}
+        {/* <div className="form-group">
           <label htmlFor="emergencyContactNumber">Contact Number:</label>
           <input
             type="tel"
@@ -277,7 +291,7 @@ export default function DeliveryForm() {
             onChange={handleChange}
             required
           />
-        </div>
+        </div> */}
 
         <h2>Employment History (Optional)</h2>
         <div className="form-group">

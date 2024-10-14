@@ -67,13 +67,27 @@ export const registerBuyer = async (req, res) => {
 export const registerDriver = async (req, res) => {
     const {
         fullName,
-        dateOfBirth,
+        // dateOfBirth,
         contactNumber,
         emailAddress,
         password,
         aadharNumber,
+        panCard,
+        passportPhoto,
+        // proofOfAddress,
+        currentAddress,
+        vehicleType,
+        vehicleRegistrationNumber,
+        drivingLicenseNumber,
+        bankAccountNumber,
+        ifscCode,
+        bankName,
+        branchName,
+        policeClearanceCertificate,
+        consentForBackgroundCheck,
+        vehicleInsuranceDetails,
         permanentAddress,
-        emergencyContact,
+        // emergencyContact,
         // other fields
     } = req.body;
 
@@ -84,13 +98,27 @@ export const registerDriver = async (req, res) => {
 
         const driver = new Driver({
             fullName,
-            dateOfBirth,
+            // dateOfBirth,
             contactNumber,
             emailAddress,
             password: hashedPassword,
+            panCard,
+            passportPhoto,
+            // proofOfAddress,
+            currentAddress,
+            vehicleType,
+            vehicleRegistrationNumber,
+            drivingLicenseNumber,
+            bankAccountNumber,
+            ifscCode,
+            bankName,
+            branchName,
+            policeClearanceCertificate,
+            consentForBackgroundCheck,
+            vehicleInsuranceDetails,
             aadharNumber,
             permanentAddress,
-            emergencyContact,
+            // emergencyContact,
             // Include other fields as necessary
         });
 
