@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { useDarkMode } from '../components/DarkModeContext';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import '../css/DeliveryForm.css';
 
 export default function DeliveryForm() {
   const { darkMode } = useDarkMode();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: '',
     dob: '',
@@ -38,9 +41,26 @@ export default function DeliveryForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const [loading, setLoading] = useState(false); 
+  const [error, setError] = useState(null); 
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted', formData);
+    setLoading(true); 
+
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/regDel`, formData);
+      console.log('Response:', response.data);
+      alert("success");
+      if(response.status === 200){
+        navigate('/User-Home-Page');  
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setError(error.response ? error.response.data : 'An error occurred'); 
+    } finally {
+      setLoading(false); 
+    }
   };
 
   return (
@@ -303,9 +323,11 @@ export default function DeliveryForm() {
           </label>
         </div>
 
-        <button type="submit" className="submit-button">
-          Submit
+        <button type="submit" className="submit-button" disabled={loading}>
+          {loading ? 'Submitting...' : 'Submit'}
         </button>
+
+        {error && <p className="error-message">{error}</p>}
       </form>
     </div>
   );

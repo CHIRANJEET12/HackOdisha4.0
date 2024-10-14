@@ -4,6 +4,7 @@ import RegistrationType from './pages/RegistrationType';
 import DeliveryForm from './pages/DeliveryForm';
 import SellerForm from './pages/SellerForm';
 import BuyerForm from './pages/BuyerForm';
+import Dashboard from './pages/Dashboard'; 
 
 const AppRoutes = () => {
   return (
@@ -13,6 +14,7 @@ const AppRoutes = () => {
       <Route path="/regDel" element={<DeliveryForm/>} />
       <Route path="/regBuyer" element={<BuyerForm/>} />
       <Route path="/regSeller" element={<SellerForm/>} />
+      <Route path="/dashboard" element={<Dashboard />} /> 
     </Routes>
   );
 };
