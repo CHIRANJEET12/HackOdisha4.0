@@ -18,18 +18,21 @@ app.use(cors({
   credentials: true, // Allow credentials if needed
 }));
 
+// Middleware for parsing JSON and URL-encoded data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Connect to MongoDB
 const mongoURI = process.env.MONGO_URI;
-
 mongoose.connect(mongoURI)
-    .then(() => console.log('Connected to Atlas MongoDB'))
-    .catch((err) => console.error('MongoDB connection error:', err));
+  .then(() => console.log('Connected to MongoDB'))
+  .catch((err) => console.error('MongoDB connection error:', err));
 
+// Route handlers
 app.use('/', authRoutes);
 app.use('/', productRoutes);
 app.use('/', otpRoutes);
 
+// Define the port and start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port http://localhost:${PORT}`));

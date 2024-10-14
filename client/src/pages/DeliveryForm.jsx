@@ -9,16 +9,13 @@ export default function DeliveryForm() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: '',
-    dob: '',
     contactNumber: '',
-    email: '',
     password: '',
     aadharNumber: '',
     panCard: '',
     photo: null,
     permanentAddress: '',
     currentAddress: '',
-    proofOfAddress: null,
     vehicleType: '',
     vehicleRegNumber: '',
     drivingLicense: '',
@@ -26,10 +23,6 @@ export default function DeliveryForm() {
     bankAccountNumber: '',
     ifscCode: '',
     bankNameBranch: '',
-    emergencyContactName: '',
-    emergencyContactNumber: '',
-    previousExperience: '',
-    reference: '',
     policeClearance: null,
     consent: false,
   });
@@ -45,26 +38,54 @@ export default function DeliveryForm() {
   const [loading, setLoading] = useState(false); 
   const [error, setError] = useState(null); 
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); 
+    setLoading(true);
+
+    const data = new FormData();
+    
+    // Assuming formData is an object that includes file inputs and other fields
+    // Append files explicitly for fields expected by multer
+    const passportPhoto = document.querySelector('input[name="passportPhoto"]');
+    const policeClearanceCertificate = document.querySelector('input[name="policeClearanceCertificate"]');
+
+    // Append file inputs
+    if (passportPhoto.files[0]) {
+        data.append('passportPhoto', passportPhoto.files[0]);
+    }
+    
+    if (policeClearanceCertificate.files[0]) {
+        data.append('policeClearanceCertificate', policeClearanceCertificate.files[0]);
+    }
+
+    // Append other form fields if necessary
+    for (const key in formData) {
+        if (key !== 'passportPhoto' && key !== 'policeClearanceCertificate') { // Exclude files
+            data.append(key, formData[key]);
+        }
+    }
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/regDel`, formData);
-      console.log('Response:', response.data);
-      console.log('response: ', response.status);
-      alert("success");
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/regDel`, data, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        console.log('Response:', response.data);
+        alert("Success");
 
-      if(response.status === 201){
-        navigate('/Userhomepage');  
-      }
+        if (response.status === 201) {
+            navigate('/Userhomepage');
+        }
     } catch (error) {
-      console.error('Error submitting form:', error);
-      setError(error.response ? error.response.data : 'An error occurred'); 
+        console.error('Error submitting form:', error);
+        alert("fail");
+        setError(error.response ? error.response.data : 'An error occurred');
     } finally {
-      setLoading(false); 
+        setLoading(false);
     }
-  };
+};
+
 
   return (
     <div className={`form-container ${darkMode ? 'dark' : 'light'}`}>
@@ -81,16 +102,6 @@ export default function DeliveryForm() {
             required
           />
         </div>
-        {/* <div className="form-group">
-          <label htmlFor="dob">Date of Birth:</label>
-          <input
-            type="date"
-            id="dob"
-            name="dob"
-            value={formData.dob}
-            onChange={handleChange}
-          />
-        </div> */}
         <div className="form-group">
           <label htmlFor="contactNumber">Contact Number:</label>
           <input
@@ -102,7 +113,7 @@ export default function DeliveryForm() {
             required
           />
         </div>
-        <div className="form-group">
+        {/* <div className="form-group">
           <label htmlFor="email">Email Address:</label>
           <input
             type="email"
@@ -112,9 +123,9 @@ export default function DeliveryForm() {
             onChange={handleChange}
             required
           />
-        </div>
+        </div> */}
         <div className="form-group">
-          <label htmlFor="password">Password :</label>
+          <label htmlFor="password">Password:</label>
           <input
             type="password"
             id="password"
@@ -153,7 +164,7 @@ export default function DeliveryForm() {
           <input
             type="file"
             id="photo"
-            name="photo"
+            name="passportPhoto"  // corrected from passportPhoto to photo
             onChange={handleChange}
             accept="image/*"
             required
@@ -180,19 +191,6 @@ export default function DeliveryForm() {
             onChange={handleChange}
           />
         </div>
-        {/* <div className="form-group">
-  <label htmlFor="proofOfAddress">Proof of Address:</label>
-  <input
-    type="file"
-    id="proofOfAddress"
-    name="proofOfAddress"
-    onChange={handleChange}
-    accept=".pdf,.jpg,.png"
-    required
-  />
-  <small>Accepted formats: .pdf, .jpg, .png</small>
-</div> */}
-
 
         <h2>Vehicle Details</h2>
         <div className="form-group">
@@ -270,56 +268,13 @@ export default function DeliveryForm() {
           />
         </div>
 
-        <h2>Emergency Contact</h2>
-        {/* <div className="form-group">
-          <label htmlFor="emergencyContactName">Name and Relationship:</label>
-          <input
-            type="text"
-            id="emergencyContactName"
-            name="emergencyContactName"
-            value={formData.emergencyContactName}
-            onChange={handleChange}
-          />
-        </div> */}
-        {/* <div className="form-group">
-          <label htmlFor="emergencyContactNumber">Contact Number:</label>
-          <input
-            type="tel"
-            id="emergencyContactNumber"
-            name="emergencyContactNumber"
-            value={formData.emergencyContactNumber}
-            onChange={handleChange}
-            required
-          />
-        </div> */}
-
-        <h2>Employment History (Optional)</h2>
-        <div className="form-group">
-          <label htmlFor="previousExperience">Previous Experience as a Delivery Person:</label>
-          <textarea
-            id="previousExperience"
-            name="previousExperience"
-            value={formData.previousExperience}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="reference">Reference from Previous Employers:</label>
-          <textarea
-            id="reference"
-            name="reference"
-            value={formData.reference}
-            onChange={handleChange}
-          />
-        </div>
-
         <h2>Background Verification</h2>
         <div className="form-group">
           <label htmlFor="policeClearance">Police Clearance Certificate:</label>
           <input
             type="file"
             id="policeClearance"
-            name="policeClearance"
+            name="policeClearanceCertificate" // corrected name to match state
             onChange={handleChange}
             accept=".pdf,.jpg,.png"
           />
@@ -343,6 +298,8 @@ export default function DeliveryForm() {
 
         {error && <p className="error-message">{error}</p>}
       </form>
+   
+
     </div>
   );
 }

@@ -10,7 +10,7 @@ export default function SellerForm() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
+    // email: '',
     address: '',
     adharNo: '',          // Added adharNo
     licenseNo: '',        // Added licenseNo
@@ -82,7 +82,7 @@ export default function SellerForm() {
           />
         </div>
 
-        <div className="form-group">
+        {/* <div className="form-group">
           <label htmlFor="email">Email:</label>
           <input
             type="email"
@@ -93,7 +93,7 @@ export default function SellerForm() {
             onChange={handleChange}
             required
           />
-        </div>
+        </div> */}
 
         <div className="form-group">
           <label htmlFor="address">Address:</label>
