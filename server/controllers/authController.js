@@ -10,21 +10,21 @@ import { encryptData } from '../utils/encryption.js';
 dotenv.config();
 
 export const registerSeller = async (req, res) => {
-    const { name, address, adharNo, licenseNo, phone, bankDetails } = req.body;
+    const { name,email, address, adharNo, licenseNo, phone, bankDetails } = req.body;
 
     try {
-        if (!name  || !address || !adharNo || !licenseNo || !phone) {
+        if (!name  || !address || !adharNo || !licenseNo || !phone || !email) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
 
-        // const existingSeller = await User.findOne({ email });
-        // if (existingSeller) {
-        //     return res.status(409).json({ error: 'Seller with this email already exists' });
-        // }
+        const existingSeller = await User.findOne({ email });
+        if (existingSeller) {
+            return res.status(409).json({ error: 'Seller with this email already exists' });
+        }
 
         const seller = new User({
             name,
-            // email,
+            email,
             address,
             adharNo,
             licenseNo,
@@ -83,6 +83,7 @@ export const registerDriver = async (req, res) => {
     try {
         const {
             fullName,
+            email,
             password,
             contactNumber,
             aadharNumber,
@@ -103,20 +104,21 @@ export const registerDriver = async (req, res) => {
         } = req.body;
 
         // Validate required fields
-        if (!fullName || !password || !contactNumber ) {
+        if (!fullName || !password || !contactNumber || !email ) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
 
-        // const existingDriver = await Driver.findOne({ email });
-        // if (existingDriver) {
-        //     return res.status(409).json({ error: 'Driver with this email already exists' });
-        // }
+        const existingDriver = await Driver1.findOne({ email });
+        if (existingDriver) {
+            return res.status(409).json({ error: 'Driver with this email already exists' });
+        }
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Create a new driver instance
         const driver = new Driver1({
             fullName,
+            email,
             password: hashedPassword,
             contactNumber,
             aadharNumber,

@@ -9,6 +9,7 @@ export default function DeliveryForm() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: '',
+    email:'',
     contactNumber: '',
     password: '',
     aadharNumber: '',
@@ -113,7 +114,7 @@ const handleSubmit = async (e) => {
             required
           />
         </div>
-        {/* <div className="form-group">
+        <div className="form-group">
           <label htmlFor="email">Email Address:</label>
           <input
             type="email"
@@ -123,7 +124,7 @@ const handleSubmit = async (e) => {
             onChange={handleChange}
             required
           />
-        </div> */}
+        </div>
         <div className="form-group">
           <label htmlFor="password">Password:</label>
           <input

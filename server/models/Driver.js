@@ -8,16 +8,12 @@ const DriverSchema = new Schema({
     contactNumber: {
         type: String,
         validate: {
-            validator: (v) => /^[0-9]{10}$/.test(v), // Validates a 10-digit phone number
+            validator: (v) => /^[0-9]{10}$/.test(v), 
             message: (props) => `${props.value} is not a valid mobile number!`,
         },
         required: true,
     },
-    // email: {
-    //     type: String,
-    //     unique: true,  // Ensures uniqueness
-    //     required: true,  // Make sure this field is required
-    //   },
+    email: { type: String, unique: true, required: true },
     aadharNumber: { type: String },
     panCard: { type: String },
     permanentAddress: { type: String },

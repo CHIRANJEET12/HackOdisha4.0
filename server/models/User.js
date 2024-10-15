@@ -9,11 +9,7 @@ const SellerSchema = new Schema({
     type: String,
     required: true,
   },
-  // email: {
-  //   type: String,
-  //   required: true,
-  //   unique: true,
-  // },
+  email: { type: String, unique: true, required: true },
   address: { // Added address field
     type: String,
     required: true, // Assuming address is required, modify if necessary

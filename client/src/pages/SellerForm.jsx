@@ -4,24 +4,23 @@ import axios from 'axios';
 import '../css/BuyerForm.css';
 import { useNavigate } from 'react-router-dom';
 
-
 export default function SellerForm() {
   const { darkMode } = useDarkMode();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
-    // email: '',
+    email: '',
     address: '',
-    adharNo: '',          // Added adharNo
-    licenseNo: '',        // Added licenseNo
-    phone: '',            // Added phone
+    adharNo: '',          
+    licenseNo: '',        
+    phone: '',            
     bankDetails: {
-      accountHolderName: '', // Added accountHolderName
-      bankAccountNumber: '',  // Added bankAccountNumber
-      ifscCode: '',          // Added ifscCode
-      bankName: '',          // Added bankName
-      branchName: '',        // Added branchName
-      upiId: '',             // Added upiId
+      accountHolderName: '', 
+      bankAccountNumber: '',  
+      ifscCode: '',          
+      bankName: '',          
+      branchName: '',        
+      upiId: '',             
     },
   });
   const [loading, setLoading] = useState(false); 
@@ -29,7 +28,7 @@ export default function SellerForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
+
     // Handle nested bankDetails input
     if (name.startsWith('bankDetails.')) {
       const bankField = name.split('.')[1];
@@ -51,11 +50,29 @@ export default function SellerForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true); 
+    setError(null); // Reset error on new submission
     try {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/regSeller`, formData);
       console.log('Response:', response.data);
       alert("Success");
-      if(response.status === 200){
+      if (response.status === 200) {
+        // Reset form data after submission
+        setFormData({
+          name: '',
+          email: '',
+          address: '',
+          adharNo: '',          
+          licenseNo: '',        
+          phone: '',            
+          bankDetails: {
+            accountHolderName: '', 
+            bankAccountNumber: '',  
+            ifscCode: '',          
+            bankName: '',          
+            branchName: '',        
+            upiId: '',             
+          },
+        });
         navigate('/Userhomepage');  
       }
     } catch (error) {
@@ -82,7 +99,7 @@ export default function SellerForm() {
           />
         </div>
 
-        {/* <div className="form-group">
+        <div className="form-group">
           <label htmlFor="email">Email:</label>
           <input
             type="email"
@@ -93,7 +110,7 @@ export default function SellerForm() {
             onChange={handleChange}
             required
           />
-        </div> */}
+        </div>
 
         <div className="form-group">
           <label htmlFor="address">Address:</label>
@@ -119,6 +136,8 @@ export default function SellerForm() {
             value={formData.adharNo}
             onChange={handleChange}
             required
+            // pattern="\d{12}" // Ensuring it is a 12 digit number
+            title="Aadhaar number must be 12 digits"
           />
         </div>
 
@@ -145,6 +164,8 @@ export default function SellerForm() {
             value={formData.phone}
             onChange={handleChange}
             required
+            pattern="\d{10}" // Ensuring it is a 10 digit number
+            title="Phone number must be 10 digits"
           />
         </div>
 
