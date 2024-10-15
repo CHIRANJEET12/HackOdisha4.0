@@ -9,6 +9,7 @@ export const Login = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [userData, setUserData] = useState(null); // State to store user data
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -28,16 +29,37 @@ export const Login = () => {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/login`, credentials);
       console.log('Response:', response.data);
 
-      // Store the token in localStorage
+      // Store the token and userId in localStorage
       localStorage.setItem('token', response.data.token);
+      const userId = response.data.userId || response.data._id; // Store userId or _id
+      localStorage.setItem('userId', userId);
+
+      // Fetch user data after successful login
+      fetchUserData(userId); // Pass userId for fetching
 
       // Navigate to the desired page after successful login
-      navigate('/Userhomepage'); // or another page you want to redirect to
+      navigate('/Userhomepage');
     } catch (err) {
       console.error('Login error:', err);
       setError('Failed to log in. Please check your credentials.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Function to fetch user data
+  const fetchUserData = async (userId) => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/getbuyer/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // Send token in headers
+        },
+      });
+      setUserData(response.data); // Store the fetched user data
+      console.log('User Data:', response.data); // Log the user data
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      setError('Failed to fetch user data.');
     }
   };
 
@@ -79,6 +101,17 @@ export const Login = () => {
 
         {error && <p className="text-danger mt-2">{error}</p>}
       </form>
+
+      {/* Display user data if available */}
+      {userData && (
+        <div className="mt-4">
+          <h3>User Details</h3>
+          <p>User ID: {userData.userId || userData._id}</p> {/* Display the user ID */}
+          <p>Email: {userData.email}</p>
+          <p>Name: {userData.name}</p>
+          {/* Display other user information as needed */}
+        </div>
+      )}
     </div>
   );
 };

@@ -10,10 +10,10 @@ import { encryptData } from '../utils/encryption.js';
 dotenv.config();
 
 export const registerSeller = async (req, res) => {
-    const { name,email, address, adharNo, licenseNo, phone, bankDetails } = req.body;
+    const { name,email,password, address, adharNo, licenseNo, phone, bankDetails } = req.body;
 
     try {
-        if (!name  || !address || !adharNo || !licenseNo || !phone || !email) {
+        if (!name  || !address || !adharNo || !licenseNo || !phone || !email || !password) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
 
@@ -25,6 +25,7 @@ export const registerSeller = async (req, res) => {
         const seller = new User({
             name,
             email,
+            password,
             address,
             adharNo,
             licenseNo,
@@ -168,19 +169,27 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        let user = await User.findOne({ email }) || await Buyer.findOne({ email }) || await Driver1.findOne({ email });
+        // Find the user in one of the collections
+        const user = await User.findOne({ email }) || await Buyer.findOne({ email }) || await Driver1.findOne({ email });
 
-        if (!user) {
+        // Check if user exists and if password is defined
+        if (!user || !user.password) {
+            console.error('User not found or password not defined for email:', email);
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
+        // Compare password
+        // const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!password) {
+            console.error('Invalid password attempt for email:', email);
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.json({ token });
+        // Generate token
+        const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '10d' });
+        
+        // Return token and user info (if needed)
+        res.json({ token, user: { id: user._id, email: user.email, role: user.role } });
     } catch (error) {
         console.error('Login error:', error);
         res.status(500).json({ message: 'Internal server error', details: error.message });

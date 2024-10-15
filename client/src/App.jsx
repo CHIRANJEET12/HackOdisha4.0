@@ -4,10 +4,12 @@ import AppRoutes from './Routes'; // Kept the AppRoutes from 'Routes'
 import { Outlet } from 'react-router-dom';
 import DarkModeToggle from './components/DarkModeToggle';
 import { DarkModeProvider } from './components/DarkModeContext'; // Import the context provider
+// import { UserProvider } from './components/UserContext';
 
 function App() {
   return (
-    <DarkModeProvider> {/* Wrap your app with DarkModeProvider */}
+    <DarkModeProvider>
+      {/* <UserProvider> Wrap your app with DarkModeProvider */}
       <Router>
         <div>
           <DarkModeToggle />
@@ -15,6 +17,7 @@ function App() {
           <AppRoutes />
         </div>
       </Router>
+      {/* </UserProvider> */}
     </DarkModeProvider>
   );
 }

@@ -2,12 +2,13 @@ import Product from '../models/Product.js';
 import User from '../models/User.js';
 
 export const postProduct = async (req, res) => {
-    const { name, description, price, location, category, yearsUsed } = req.body; // Use 'name' here
+    const { name,email, description, price, location, category, yearsUsed } = req.body; // Use 'name' here
     const sellerId = req.user.userId; 
     try {
         const product = new Product({
             seller: sellerId, 
-            name, // Ensure you're assigning the 'name' field
+            name,
+            email, 
             description, 
             price, 
             location,

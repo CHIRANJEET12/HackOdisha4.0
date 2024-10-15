@@ -4,8 +4,13 @@ import {
     registerSeller,
     registerBuyer,
     registerDriver,
+    getAllBuyers,
     login,
 } from '../controllers/authController.js';
+import {    sendRequest,
+    getPendingRequests,
+    respondToRequest,
+} from '../controllers/Request.js';
 
 const router = express.Router();
 
@@ -30,6 +35,10 @@ router.post('/regDel', upload.fields([
     { name: 'passportPhoto', maxCount: 1 }, 
     { name: 'policeClearanceCertificate', maxCount: 1 }
 ]), registerDriver);
+router.post('/send-request', sendRequest);
+router.get('/requests/:userId', getPendingRequests);
+router.put('/respond-request', respondToRequest);
+router.get('/getbuyer',getAllBuyers)
 router.post('/login', login);
 
 export default router;

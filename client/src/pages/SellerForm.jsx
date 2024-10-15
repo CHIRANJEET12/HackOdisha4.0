@@ -10,6 +10,7 @@ export default function SellerForm() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    password:'',
     address: '',
     adharNo: '',          
     licenseNo: '',        
@@ -94,6 +95,19 @@ export default function SellerForm() {
             name="name"
             placeholder="Enter your name"
             value={formData.name}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            value={formData.password}
             onChange={handleChange}
             required
           />

@@ -9,8 +9,8 @@ export const UserHomePage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchName, setSearchName] = useState(''); // State for name search
-  const [searchPrice, setSearchPrice] = useState(''); // State for price search
+  const [searchName, setSearchName] = useState('');
+  const [searchPrice, setSearchPrice] = useState('');
 
   const handlePostClick = () => {
     navigate('/create-post'); // Adjust the route as needed
@@ -23,7 +23,7 @@ export const UserHomePage = () => {
         const token = localStorage.getItem('token'); // Get token from localStorage
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/products`, {
           headers: {
-            'Authorization': `Bearer ${token}`, // Include the token in the request headers
+            'Authorization': `Bearer ${token}`,
           },
         });
         setProducts(response.data); // Set the products in state
@@ -41,13 +41,57 @@ export const UserHomePage = () => {
   // Filter products based on search criteria
   const filteredProducts = products.filter(product => {
     const isNameMatch = product.name.toLowerCase().includes(searchName.toLowerCase());
-    const isPriceMatch = searchPrice ? product.price <= Number(searchPrice) : true; // Only filter by price if input is provided
+    const isPriceMatch = searchPrice ? product.price <= Number(searchPrice) : true;
     return isNameMatch && isPriceMatch;
   });
+
+  // Function to handle interested button click
+  const handleInterestedClick = async (product) => {
+    const token = localStorage.getItem('token'); // Get token from localStorage
+    const senderId = localStorage.getItem('userId'); // Assuming userId is stored in localStorage
+    const receiverId = product.seller; // Get the userId of the person who posted the product
+    const productId = product._id; // Access the product ID
+
+    if (!senderId || !receiverId) {
+      console.error('Sender ID or Receiver ID is missing.');
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/send-request`, // Adjust endpoint as needed
+        {
+          senderId,
+          receiverId,
+          productId,
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        }
+      );
+      console.log('Interest request sent:', response.data);
+      alert('Interest request sent!'); // Alert the user on success
+    } catch (err) {
+      console.error('Error sending interest:', err);
+      alert('Failed to send interest request.'); // Alert the user on failure
+    }
+  };
+
+  // Function to handle logout
+  const handleLogout = () => {
+    localStorage.removeItem('token'); // Remove token from localStorage
+    localStorage.removeItem('userId'); // Remove userId from localStorage
+    navigate('/login'); // Redirect to login page
+  };
 
   return (
     <div>
       <h1>User Home Page</h1>
+      <button onClick={handleLogout} style={{ marginBottom: '20px' }}>
+        Logout
+      </button>
       <div>
         <FontAwesomeIcon 
           icon={faPen} 
@@ -86,6 +130,7 @@ export const UserHomePage = () => {
                 <p>Location: {product.location}</p>
                 <p>Category: {product.category}</p>
                 <p>Years Used: {product.yearsUsed}</p>
+                <button onClick={() => handleInterestedClick(product)}>Interested</button>
               </li>
             ))}
           </ul>
