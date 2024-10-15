@@ -56,7 +56,7 @@ export default function SellerForm() {
       console.log('Response:', response.data);
       alert("Success");
       if(response.status === 200){
-        navigate('/User-Home-Page');  
+        navigate('/Userhomepage');  
       }
     } catch (error) {
       console.error('Error submitting form:', error);

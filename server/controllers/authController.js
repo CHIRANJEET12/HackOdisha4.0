@@ -166,7 +166,7 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        let user = await User.findOne({ email }) || await Buyer.findOne({ email }) || await Driver.findOne({ email });
+        let user = await User.findOne({ email }) || await Buyer.findOne({ email }) || await Driver1.findOne({ contactNumber });
 
         if (!user) {
             return res.status(401).json({ message: 'Invalid email or password' });
@@ -182,5 +182,40 @@ export const login = async (req, res) => {
     } catch (error) {
         console.error('Login error:', error);
         res.status(500).json({ message: 'Internal server error', details: error.message });
+    }
+};
+
+
+
+// Fetch all sellers
+export const getAllSellers = async (req, res) => {
+    try {
+        const sellers = await User.find(); // Fetch all sellers from the User model
+        res.status(200).json(sellers); // Return the sellers as JSON
+    } catch (error) {
+        console.error('Error fetching sellers:', error);
+        res.status(500).json({ error: 'Failed to fetch sellers', details: error.message });
+    }
+};
+
+// Fetch all buyers
+export const getAllBuyers = async (req, res) => {
+    try {
+        const buyers = await Buyer.find(); // Fetch all buyers from the Buyer model
+        res.status(200).json(buyers); // Return the buyers as JSON
+    } catch (error) {
+        console.error('Error fetching buyers:', error);
+        res.status(500).json({ error: 'Failed to fetch buyers', details: error.message });
+    }
+};
+
+// Fetch all drivers
+export const getAllDrivers = async (req, res) => {
+    try {
+        const drivers = await Driver1.find(); // Fetch all drivers from the Driver model
+        res.status(200).json(drivers); // Return the drivers as JSON
+    } catch (error) {
+        console.error('Error fetching drivers:', error);
+        res.status(500).json({ error: 'Failed to fetch drivers', details: error.message });
     }
 };
