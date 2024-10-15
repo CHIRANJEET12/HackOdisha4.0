@@ -168,7 +168,7 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        let user = await User.findOne({ email }) || await Buyer.findOne({ email }) || await Driver1.findOne({ contactNumber });
+        let user = await User.findOne({ email }) || await Buyer.findOne({ email }) || await Driver1.findOne({ email });
 
         if (!user) {
             return res.status(401).json({ message: 'Invalid email or password' });
