@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDarkMode } from '../components/DarkModeContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import "../css/UserHomePage.css"
 
 export const UserHomePage = () => {
+  const { darkMode } = useDarkMode();
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -87,12 +90,12 @@ export const UserHomePage = () => {
   };
 
   return (
-    <div>
+    <div className="homepage-container">
       <h1>User Home Page</h1>
-      <button onClick={handleLogout} style={{ marginBottom: '20px' }}>
+      <button className={darkMode ? 'dark-mode-button' : 'light-mode-button'} onClick={handleLogout} style={{ marginBottom: '20px' }}>
         Logout
       </button>
-      <div>
+      <div className="create-post-icon">
         <FontAwesomeIcon 
           icon={faPen} 
           style={{ fontSize: '24px', cursor: 'pointer' }} 
@@ -101,19 +104,21 @@ export const UserHomePage = () => {
       </div>
 
       {/* Search Filters */}
-      <div style={{ marginTop: '20px' }}>
+      <div className="search-filters" style={{ marginTop: '20px' }}>
         <input
           type="text"
           placeholder="Search by name"
           value={searchName}
           onChange={(e) => setSearchName(e.target.value)} // Update searchName on input change
           style={{ marginRight: '10px' }}
+          className="search-input"
         />
         <input
           type="number"
           placeholder="Max price"
           value={searchPrice}
           onChange={(e) => setSearchPrice(e.target.value)} // Update searchPrice on input change
+          className="search-input"
         />
       </div>
 
@@ -121,19 +126,23 @@ export const UserHomePage = () => {
       {error && <p className="text-danger">{error}</p>}
       <div>
         {filteredProducts.length > 0 ? (
-          <ul>
-            {filteredProducts.map(product => (
-              <li key={product._id}>
-                <h3>{product.name}</h3>
-                <p>{product.description}</p>
-                <p>Price: ₹{product.price}</p>
-                <p>Location: {product.location}</p>
-                <p>Category: {product.category}</p>
-                <p>Years Used: {product.yearsUsed}</p>
-                <button onClick={() => handleInterestedClick(product)}>Interested</button>
-              </li>
-            ))}
-          </ul>
+          filteredProducts.map(product => (
+            <div key={product._id} className="blog-post">
+              <h2 className="post-title">{product.name}</h2>
+              <p className="post-description">{product.description}</p>
+              <div className="post-details">
+                <span className="post-price">Price: ₹{product.price}</span>
+                <span className="post-location">Location: {product.location}</span>
+                <span className="post-category">Category: {product.category}</span>
+                <span className="post-years-used">Years Used: {product.yearsUsed}</span>
+                <button 
+                  className={darkMode ? 'dark-mode-button' : 'light-mode-button'}
+                  onClick={() => handleInterestedClick(product)}>
+                  Interested
+                </button>
+                </div>
+            </div>
+          ))
         ) : (
           <p>No products available.</p>
         )}
@@ -141,3 +150,4 @@ export const UserHomePage = () => {
     </div>
   );
 };
+
