@@ -31,7 +31,8 @@ router.post('/regDel', upload.fields([
     { name: 'passportPhoto', maxCount: 1 }, 
     { name: 'policeClearanceCertificate', maxCount: 1 }
 ]), registerDriver);
-
 router.post('/login', login);
+
+
 
 export default router;

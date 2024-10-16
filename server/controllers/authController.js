@@ -165,6 +165,7 @@ export const registerDriver = async (req, res) => {
     }
 };
 
+
 export const login = async (req, res) => {
     const { email, password } = req.body;
 
@@ -172,24 +173,35 @@ export const login = async (req, res) => {
         // Find the user in one of the collections
         const user = await User.findOne({ email }) || await Buyer.findOne({ email }) || await Driver1.findOne({ email });
 
-        // Check if user exists and if password is defined
-        if (!user || !user.password) {
-            console.error('User not found or password not defined for email:', email);
+        // Check if user exists
+        if (!user) {
+            console.error('User not found for email:', email);
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        // Compare password
-        // const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!password) {
+        // Check if password is valid
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
             console.error('Invalid password attempt for email:', email);
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
         // Generate token
-        const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '10d' });
-        
-        // Return token and user info (if needed)
-        res.json({ token, user: { id: user._id, email: user.email, role: user.role } });
+        const token = jwt.sign(
+            { userId: user._id, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: '10d' }
+        );
+
+        // Return token and user info
+        res.json({
+            token,
+            user: {
+                id: user._id,
+                email: user.email,
+                role: user.role
+            }
+        });
     } catch (error) {
         console.error('Login error:', error);
         res.status(500).json({ message: 'Internal server error', details: error.message });

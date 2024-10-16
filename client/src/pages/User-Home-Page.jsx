@@ -48,38 +48,9 @@ export const UserHomePage = () => {
     return isNameMatch && isPriceMatch;
   });
 
-  // Function to handle interested button click
-  const handleInterestedClick = async (product) => {
-    const token = localStorage.getItem('token'); // Get token from localStorage
-    const senderId = localStorage.getItem('userId'); // Assuming userId is stored in localStorage
-    const receiverId = product.seller; // Get the userId of the person who posted the product
-    const productId = product._id; // Access the product ID
-
-    if (!senderId || !receiverId) {
-      console.error('Sender ID or Receiver ID is missing.');
-      return;
-    }
-
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/send-request`, // Adjust endpoint as needed
-        {
-          senderId,
-          receiverId,
-          productId,
-        },
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        }
-      );
-      console.log('Interest request sent:', response.data);
-      alert('Interest request sent!'); // Alert the user on success
-    } catch (err) {
-      console.error('Error sending interest:', err);
-      alert('Failed to send interest request.'); // Alert the user on failure
-    }
+  // Function to navigate to product details
+  const handleInterestedClick = (product) => {
+    navigate(`/product/${product._id}`); // Navigate to product details page
   };
 
   // Function to handle logout
@@ -150,4 +121,3 @@ export const UserHomePage = () => {
     </div>
   );
 };
-

@@ -9,7 +9,6 @@ export const Login = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [userData, setUserData] = useState(null); // State to store user data
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -20,6 +19,18 @@ export const Login = () => {
     });
   };
 
+  const decodeJWT = (token) => {
+    if (!token) return null;
+
+    // Split the token into parts
+    const payload = token.split('.')[1]; // Get the second part of the JWT (the payload)
+
+    // Decode the base64 URL-encoded string
+    const decoded = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+
+    return decoded;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -27,17 +38,19 @@ export const Login = () => {
 
     try {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/login`, credentials);
-      console.log('Response:', response.data);
+      const { token } = response.data;
+
+      // Decode the token to get userId and role
+      const decodedToken = decodeJWT(token); // Decode using the manual method
+      const userId = decodedToken.userId; // Extract userId from the token
+      const userRole = decodedToken.role;   // Extract userRole from the token
 
       // Store the token and userId in localStorage
-      localStorage.setItem('token', response.data.token);
-      // const userId = response.data.userId || response.data._id; // Store userId or _id
-      // localStorage.setItem('userId', userId);
+      localStorage.setItem('token', token);
+      localStorage.setItem('userId', userId);
+      localStorage.setItem('role', userRole);
 
-      // Fetch user data after successful login
-      // fetchUserData(userId); // Pass userId for fetching
-
-      // Navigate to the desired page after successful login
+      // Navigate to the user's homepage
       navigate('/Userhomepage');
     } catch (err) {
       console.error('Login error:', err);
@@ -47,27 +60,10 @@ export const Login = () => {
     }
   };
 
-  // Function to fetch user data
-  // const fetchUserData = async (userId) => {
-  //   try {
-  //     const response = await axios.get(`${import.meta.env.VITE_API_URL}/getbuyer/${userId}`, {
-  //       headers: {
-  //         Authorization: `Bearer ${localStorage.getItem('token')}`, // Send token in headers
-  //       },
-  //     });
-  //     setUserData(response.data); // Store the fetched user data
-  //     console.log('User Data:', response.data); // Log the user data
-  //   } catch (error) {
-  //     console.error('Error fetching user data:', error);
-  //     setError('Failed to fetch user data.');
-  //   }
-  // };
-
   return (
     <div className="container mt-5">
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
-        {/* Email */}
         <div className="mb-3">
           <label htmlFor="email" className="form-label">Email</label>
           <input 
@@ -81,7 +77,6 @@ export const Login = () => {
           />
         </div>
 
-        {/* Password */}
         <div className="mb-3">
           <label htmlFor="password" className="form-label">Password</label>
           <input 
@@ -101,8 +96,6 @@ export const Login = () => {
 
         {error && <p className="text-danger mt-2">{error}</p>}
       </form>
-
-
     </div>
   );
 };
