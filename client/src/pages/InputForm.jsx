@@ -1,9 +1,12 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDarkMode } from '../components/DarkModeContext';
+import "../css/InputForm.css" 
 
 function InputForm() {
   const navigate = useNavigate();
+  const { darkMode } = useDarkMode();
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -60,8 +63,8 @@ function InputForm() {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className={`form-container ${darkMode ? 'dark' : 'light'}`}>
+      <form onSubmit={handleSubmit} className="responsive-form">
         {/* Book Name */}
         <div className="mb-3">
           <label htmlFor="name" className="form-label">Product Name</label>
@@ -77,7 +80,7 @@ function InputForm() {
         </div>
 
         {/* Description */}
-        <div className="mb-3">
+        <div className="form-group">
           <label htmlFor="description" className="form-label">Description</label>
           <textarea 
             className="form-control" 
@@ -108,7 +111,7 @@ function InputForm() {
         </div>
 
         {/* Location */}
-        <div className="mb-3">
+        <div className="form-group">
           <label htmlFor="location" className="form-label">Location</label>
           <input 
             type="text" 
@@ -122,20 +125,24 @@ function InputForm() {
         </div>
 
         {/* Category */}
-        <div className="mb-3">
+        <div className="form-group">
           <label htmlFor="category" className="form-label">Category</label>
-          <input 
-            name="category" 
+          <select 
+            className="form-select" 
             id="category" 
-            className="form-select"
-            value={formData.category}
-            onChange={handleChange}
+            name="category" 
+            value={formData.category} 
+            onChange={handleChange} 
             required
-          />
+          >
+            <option value="textbook">Textbook</option>
+            <option value="others">Others</option>
+          </select>
+
         </div>
 
         {/* No. of Years Used */}
-        <div className="mb-3">
+        <div className="form-group">
           <label htmlFor="yearsUsed" className="form-label">No. of Years Used</label>
           <input 
             type="number" 
@@ -149,7 +156,7 @@ function InputForm() {
         </div>
 
         {/* Email */}
-        <div className="mb-3">
+        <div className="form-group">
           <label htmlFor="email" className="form-label">Email</label>
           <input 
             type="email" 
@@ -163,7 +170,7 @@ function InputForm() {
         </div>
 
         {/* Checkbox */}
-        <div className="mb-3 form-check">
+        <div className="form-group checkbox-group">
           <input 
             type="checkbox" 
             className="form-check-input" 
@@ -175,7 +182,7 @@ function InputForm() {
           <label className="form-check-label" htmlFor="exampleCheck1">Check me out</label>
         </div>
 
-        <button type="submit" className="btn btn-primary" disabled={loading}>
+        <button type="submit" className={darkMode ? 'dark-mode-button' : 'light-mode-button'}disabled={loading}>
           {loading ? 'Submitting...' : 'Submit'}
         </button>
 
