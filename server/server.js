@@ -5,6 +5,7 @@ import cors from 'cors'; // Import CORS
 import authRoutes from './routes/authRoutes.js';
 import otpRoutes from './routes/otpRoutes.js';
 import productRoutes from './routes/productRoutes.js';
+import comments from './routes/comments.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -32,6 +33,7 @@ mongoose.connect(mongoURI)
 app.use('/', authRoutes);
 app.use('/', productRoutes);
 app.use('/', otpRoutes);
+app.use('/',comments);
 
 // Define the port and start the server
 const PORT = process.env.PORT || 3000;

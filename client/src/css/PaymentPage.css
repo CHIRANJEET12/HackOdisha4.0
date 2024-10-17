@@ -1,0 +1,7 @@
+.pay-button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh; /* This ensures the content is centered vertically */
+}

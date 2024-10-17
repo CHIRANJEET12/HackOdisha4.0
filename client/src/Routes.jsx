@@ -8,6 +8,12 @@ import Dashboard from './pages/Dashboard';
 import { UserHomePage } from './pages/User-Home-Page';
 import InputForm from './pages/InputForm';
 import { Login } from './pages/Login';
+import ProductDetailsPage from './pages/ProductDetailsPage '
+import PaymentConfirmatiom from './pages/PaymentConfirmatiom';
+import { PaymentPage } from './pages/PaymentPage';
+
+
+//ABC
 
 const AppRoutes = () => {
   return (
@@ -15,12 +21,15 @@ const AppRoutes = () => {
       <Route path="/" element={<Home />} />
       <Route path="/Registration" element={<RegistrationType/>} />
       <Route path="/create-post" element={<InputForm/>} />
+      <Route path="/product/:id" element={<ProductDetailsPage />} />
       <Route path="/login" element={<Login/>} />
       <Route path="/regDel" element={<DeliveryForm/>} />
       <Route path="/regBuyer" element={<BuyerForm/>} />
       <Route path="/regSeller" element={<SellerForm/>} />
       <Route path="/dashboard" element={<Dashboard />} /> 
-      <Route path="/Userhomepage" element={<UserHomePage />} /> 
+      <Route path="/Userhomepage" element={<UserHomePage />} />  
+      <Route path='/payment' element={<PaymentPage />}/>
+      <Route path='/confirmation-payment' element={<PaymentConfirmatiom />}/> 
     </Routes>
   );
 };
