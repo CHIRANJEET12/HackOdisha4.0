@@ -1,8 +1,8 @@
-import  { useState } from 'react';
-import '../css/PaymentButton.css'
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../css/PaymentButton.css';
 
-export const PaymentButton = ({ sellerId, amount }) => {
+export const PaymentButton = ({ sellerId, amount, productID }) => {
   const [showQRCode, setShowQRCode] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -11,21 +11,19 @@ export const PaymentButton = ({ sellerId, amount }) => {
   const qrCodeImageUrl = '../GooglePay_QR.png';
 
   const handlePayClick = () => {
-    // Display the QR code image when the user clicks "Generate QR Code"
     setError(null);
-
-    // Display the QR code by setting the state to true
-    setShowQRCode(true);
+    setShowQRCode(true); // Display the QR code when the user clicks the button
   };
 
-
-  const handlenextpage = () => {
-    navigate('/confirmation-payment')
-  }
-
+  const handleNextPage = () => {
+    // Navigate to the payment confirmation page and pass the data
+    navigate('/confirmation-payment', {
+      state: { sellerId, amount, productID },
+    });
+  };
 
   return (
-    <div >
+    <div>
       <button
         onClick={handlePayClick}
         className="pay-button"
@@ -42,14 +40,20 @@ export const PaymentButton = ({ sellerId, amount }) => {
             alt="UPI Payment QR Code"
             style={{ width: '200px', height: '200px' }}
           />
-        <p
-         style={{ fontWeight: 'bold'}}
-   
->Amount to be paid:{amount}</p>
-
-<button style={{'padding': '10px 20px',}} onClick={handlenextpage}> Fill the form to confirm payment</button>
+          <p style={{ fontWeight: 'bold' }}>
+            Product ID: {productID} <br />
+            Amount to be paid: {amount}
+          </p>
+          <button
+            style={{ padding: '10px 20px' }}
+            onClick={handleNextPage}
+          >
+            Fill the form to confirm payment
+          </button>
         </div>
       )}
     </div>
   );
 };
+
+export default PaymentButton;
