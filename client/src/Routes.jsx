@@ -11,7 +11,7 @@ import { Login } from './pages/Login';
 import ProductDetailsPage from './pages/ProductDetailsPage '
 import PaymentConfirmatiom from './pages/PaymentConfirmatiom';
 import { PaymentPage } from './pages/PaymentPage';
-
+import OrderConfirmation from './pages/OrderConfirmation';
 
 //ABC
 
@@ -30,6 +30,7 @@ const AppRoutes = () => {
       <Route path="/Userhomepage" element={<UserHomePage />} />  
       <Route path='/payment' element={<PaymentPage />}/>
       <Route path='/confirmation-payment' element={<PaymentConfirmatiom />}/> 
+      <Route path='/Delivery-confirmation' element={<OrderConfirmation/>}/>
     </Routes>
   );
 };

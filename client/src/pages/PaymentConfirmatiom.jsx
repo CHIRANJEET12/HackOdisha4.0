@@ -1,11 +1,18 @@
-import  { useState } from 'react';
-import '../css/PaymentForm.css'; // Create this CSS file for styling
+import { useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import '../css/PaymentForm.css';
+import { useNavigate } from 'react-router-dom';
 
-export const PaymentConfirmatiom= () => {
+export const PaymentConfirmation = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { productID, amount } = location.state || {};
+
   const [formData, setFormData] = useState({
     transactionId: '',
-    amountPaid: '',
+    amountPaid: amount || '',
     paymentTime: '',
+    productID: productID || '',
   });
 
   const [errors, setErrors] = useState({});
@@ -15,7 +22,7 @@ export const PaymentConfirmatiom= () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const validationErrors = validateForm(formData);
@@ -24,7 +31,27 @@ export const PaymentConfirmatiom= () => {
     } else {
       setErrors({});
       console.log('Form submitted:', formData);
-      // Handle the form submission logic (e.g., send data to backend)
+      
+      // Send the data to your backend
+      try {
+        const response = await fetch('http://localhost:3000/orders/create-order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          console.log('Order created successfully:', data);
+          navigate('/Delivery-confirmation');
+        } else {
+          console.error('Error creating order:', data.message);
+        }
+      } catch (error) {
+        console.error('Network error:', error);
+      }
     }
   };
 
@@ -50,9 +77,7 @@ export const PaymentConfirmatiom= () => {
             onChange={handleChange}
             className={errors.transactionId ? 'error' : ''}
           />
-          {errors.transactionId && (
-            <span className="error-text">{errors.transactionId}</span>
-          )}
+          {errors.transactionId && <span className="error-text">{errors.transactionId}</span>}
         </div>
 
         <div className="form-field">
@@ -64,10 +89,21 @@ export const PaymentConfirmatiom= () => {
             value={formData.amountPaid}
             onChange={handleChange}
             className={errors.amountPaid ? 'error' : ''}
+            disabled
           />
-          {errors.amountPaid && (
-            <span className="error-text">{errors.amountPaid}</span>
-          )}
+          {errors.amountPaid && <span className="error-text">{errors.amountPaid}</span>}
+        </div>
+
+        <div className="form-field">
+          <label htmlFor="productID">Product ID</label>
+          <input
+            type="text"
+            id="productID"
+            name="productID"
+            value={formData.productID}
+            readOnly
+            className="read-only"
+          />
         </div>
 
         <div className="form-field">
@@ -80,9 +116,7 @@ export const PaymentConfirmatiom= () => {
             onChange={handleChange}
             className={errors.paymentTime ? 'error' : ''}
           />
-          {errors.paymentTime && (
-            <span className="error-text">{errors.paymentTime}</span>
-          )}
+          {errors.paymentTime && <span className="error-text">{errors.paymentTime}</span>}
         </div>
 
         <button type="submit" className="submit-button">Submit</button>
@@ -91,4 +125,4 @@ export const PaymentConfirmatiom= () => {
   );
 };
 
-export default PaymentConfirmatiom;
+export default PaymentConfirmation;
