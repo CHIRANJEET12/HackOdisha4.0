@@ -1,0 +1,23 @@
+
+.pay-button {
+  padding: 10px 20px !important; /* Use !important to override Bootstrap padding */
+  font-size: 16px !important;
+  margin-bottom: 20px !important;
+  cursor: pointer;
+  background-color: #007bff !important; /* Override Bootstrap primary button color */
+  border: none !important;
+  color: white !important;
+  border-radius: 4px !important;
+}
+
+
+img {
+  margin: 10px 0;
+  border-radius: 8px;
+}
+
+.error-text {
+  color: red;
+  margin-bottom: 10px;
+  text-align: center;
+}
