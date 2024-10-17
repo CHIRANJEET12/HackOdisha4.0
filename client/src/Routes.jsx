@@ -13,6 +13,8 @@ import PaymentConfirmatiom from './pages/PaymentConfirmatiom';
 import { PaymentPage } from './pages/PaymentPage';
 
 
+//ABC
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -25,9 +27,9 @@ const AppRoutes = () => {
       <Route path="/regBuyer" element={<BuyerForm/>} />
       <Route path="/regSeller" element={<SellerForm/>} />
       <Route path="/dashboard" element={<Dashboard />} /> 
-      <Route path="/Userhomepage" element={<UserHomePage />} /> 
+      <Route path="/Userhomepage" element={<UserHomePage />} />  
       <Route path='/payment' element={<PaymentPage />}/>
-      <Route path='/confirmation-payment' element={<PaymentConfirmatiom />}/>
+      <Route path='/confirmation-payment' element={<PaymentConfirmatiom />}/> 
     </Routes>
   );
 };
