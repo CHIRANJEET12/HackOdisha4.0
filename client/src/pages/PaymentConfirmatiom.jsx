@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import '../css/PaymentForm.css'; // Create this CSS file for styling
 
 export const PaymentConfirmatiom= () => {

@@ -50,8 +50,10 @@ export const UserHomePage = () => {
 
   // Function to navigate to product details
   const handleInterestedClick = (product) => {
-    navigate(`/product/${product._id}`); // Navigate to product details page
+    const { seller, price } = product;
+    navigate('/payment', { state: { sellerId: seller, amount: price } });
   };
+  
 
   // Function to handle logout
   const handleLogout = () => {
@@ -109,7 +111,7 @@ export const UserHomePage = () => {
                 <button 
                   className={darkMode ? 'dark-mode-button' : 'light-mode-button'}
                   onClick={() => handleInterestedClick(product)}>
-                  Interested
+                 Buy Now
                 </button>
                 </div>
             </div>

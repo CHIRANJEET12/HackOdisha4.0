@@ -9,6 +9,9 @@ import { UserHomePage } from './pages/User-Home-Page';
 import InputForm from './pages/InputForm';
 import { Login } from './pages/Login';
 import ProductDetailsPage from './pages/ProductDetailsPage '
+import PaymentConfirmatiom from './pages/PaymentConfirmatiom';
+import { PaymentPage } from './pages/PaymentPage';
+
 
 const AppRoutes = () => {
   return (
@@ -23,6 +26,8 @@ const AppRoutes = () => {
       <Route path="/regSeller" element={<SellerForm/>} />
       <Route path="/dashboard" element={<Dashboard />} /> 
       <Route path="/Userhomepage" element={<UserHomePage />} /> 
+      <Route path='/payment' element={<PaymentPage />}/>
+      <Route path='/confirmation-payment' element={<PaymentConfirmatiom />}/>
     </Routes>
   );
 };
