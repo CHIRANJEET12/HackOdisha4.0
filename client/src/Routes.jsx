@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard';
 import { UserHomePage } from './pages/User-Home-Page';
 import InputForm from './pages/InputForm';
 import { Login } from './pages/Login';
+import ProductDetailsPage from './pages/ProductDetailsPage '
 
 const AppRoutes = () => {
   return (
@@ -15,6 +16,7 @@ const AppRoutes = () => {
       <Route path="/" element={<Home />} />
       <Route path="/Registration" element={<RegistrationType/>} />
       <Route path="/create-post" element={<InputForm/>} />
+      <Route path="/product/:id" element={<ProductDetailsPage />} />
       <Route path="/login" element={<Login/>} />
       <Route path="/regDel" element={<DeliveryForm/>} />
       <Route path="/regBuyer" element={<BuyerForm/>} />

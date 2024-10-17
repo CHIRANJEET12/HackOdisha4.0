@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDarkMode } from '../components/DarkModeContext'; 
 import '../css/Dashboard.css';
 
@@ -6,18 +6,12 @@ const Dashboard = () => {
   const { darkMode } = useDarkMode();
   const [openSections, setOpenSections] = useState({});
   
-  // State to hold data for login/security and sales/transactions
+  // State to hold data for login/security
   const [loginData, setLoginData] = useState({
     username: 'user123',
     email: 'user@example.com',
     phoneNumber: '123-456-7890',
     password: 'password123',
-  });
-
-  const [salesData, setSalesData] = useState({
-    soldBooks: 5,
-    salesEarnings: 150,
-    salesHistory: ['Book 1', 'Book 2', 'Book 3'],
   });
 
   // State to manage which item is being edited
@@ -36,11 +30,9 @@ const Dashboard = () => {
   };
 
   const handleSave = () => {
-    if (editing.section === 'loginAndSecurity') {
-      setLoginData((prev) => ({ ...prev, [editing.key]: editing.value }));
-    } else if (editing.section === 'salesAndTransactions' && editing.key in salesData) {
-      setSalesData((prev) => ({ ...prev, [editing.key]: editing.value }));
-    }
+    const updatedLoginData = { ...loginData, [editing.key]: editing.value };
+    setLoginData(updatedLoginData);
+    localStorage.setItem('loginData', JSON.stringify(updatedLoginData)); // Save to local storage
     setEditing({ section: null, key: null, value: '' }); // Reset editing state
   };
 
@@ -64,33 +56,26 @@ const Dashboard = () => {
       ],
     },
     {
-      key: 'salesAndTransactions',
-      title: 'Sales & Transactions',
-      items: [
-        { label: 'Sold Books', value: salesData.soldBooks, editable: false, key: 'soldBooks' },
-        { label: 'Sales Earnings', value: salesData.salesEarnings, editable: false, key: 'salesEarnings' },
-        { label: 'Sales History', value: salesData.salesHistory.join(', '), editable: false },
-      ],
-    },
-    {
-      key: 'notifications',
-      title: 'Notifications',
-      items: [
-        { label: 'New Book Release', editable: false },
-        { label: 'Order Update', editable: false },
-        { label: 'Promotions', editable: false },
-      ],
-    },
-    {
       key: 'supportAndHelp',
       title: 'Support and Help',
       items: [
-        { label: 'FAQs', editable: false },
-        { label: 'Contact Support', editable: false },
-        { label: 'How to Sell Guide', editable: false },
+        { label: 'FAQs', editable: false, detail: 'Frequently Asked Questions related to your account and transactions.' },
+        { label: 'Contact Support', editable: false, detail: 'Get in touch with our support team for assistance.' },
+        { label: 'How to Sell Guide', editable: false, detail: 'A comprehensive guide on how to sell books on our platform.' },
+        { label: 'User Manual', editable: false, detail: 'Step-by-step instructions on using the dashboard.' },
+        { label: 'Feedback', editable: false, detail: 'Share your feedback to help us improve our service.' },
       ],
     },
   ];
+
+  // Load data from local storage on component mount
+  useEffect(() => {
+    const storedLoginData = localStorage.getItem('loginData');
+    
+    if (storedLoginData) {
+      setLoginData(JSON.parse(storedLoginData));
+    }
+  }, []);
 
   return (
     <div className={`dashboard-container ${darkMode ? 'dark' : ''}`}>
@@ -129,6 +114,7 @@ const Dashboard = () => {
                     {section.items.map((item, idx) => (
                       <li key={idx}>
                         <span>{item.label}: </span>
+                        {item.detail && <span>{item.detail}</span>}
                         {item.editable && editing.section === section.key && editing.key === item.key ? (
                           <>
                             <input
