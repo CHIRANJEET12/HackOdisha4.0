@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDarkMode } from '../components/DarkModeContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -50,8 +50,8 @@ export const UserHomePage = () => {
 
   // Function to navigate to product details
   const handleInterestedClick = (product) => {
-    const { seller, price } = product;
-    navigate('/payment', { state: { sellerId: seller, amount: price } });
+    const { seller, price,_id } = product;
+    navigate('/payment', { state: { sellerId: seller, amount: price , productID : _id } });
   };
   
 

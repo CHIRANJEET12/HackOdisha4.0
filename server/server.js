@@ -5,8 +5,13 @@ import cors from 'cors'; // Import CORS
 import authRoutes from './routes/authRoutes.js';
 import otpRoutes from './routes/otpRoutes.js';
 import productRoutes from './routes/productRoutes.js';
+
+import ordersRoute from './routes/orderRoutes.js'; 
+
+
 import comments from './routes/comments.js';
 import order from './routes/orderroute.js';
+
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -30,12 +35,21 @@ mongoose.connect(mongoURI)
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
+  app.use('/create-order', (req, res, next) => {
+    console.log('Received a request to /create-order');
+    next();
+  });
+
 // Route handlers
 app.use('/', authRoutes);
 app.use('/', productRoutes);
 app.use('/', otpRoutes);
+
+app.use('/orders', ordersRoute);
+
 app.use('/',comments);
 app.use('/',order);
+
 
 // Define the port and start the server
 const PORT = process.env.PORT || 3000;
