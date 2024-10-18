@@ -1,4 +1,3 @@
-
 import { useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import '../css/PaymentForm.css';
@@ -9,21 +8,18 @@ export const PaymentConfirmation = () => {
   const location = useLocation();
   const { productID, amount } = location.state || {};
 
-import { useState } from 'react';
-import axios from 'axios'; // Import Axios
-import '../css/PaymentForm.css'; // Create this CSS file for styling
-
-export const PaymentConfirmatiom = () => {
-
   const [formData, setFormData] = useState({
     transactionId: '',
     amountPaid: amount || '',
     paymentTime: '',
     productID: productID || '',
+    buyer: localStorage.getItem('userId') || '', // Retrieve buyerId from local storage
+    seller: localStorage.getItem('sellerId') || '', // Retrieve sellerId from local storage
+    deliveryAddress: localStorage.getItem('location-buyer') || '', // Retrieve buyer location from local storage
+    pickupAddress: localStorage.getItem('location') || '' // Retrieve seller location from local storage
   });
 
   const [errors, setErrors] = useState({});
-  const [submissionMessage, setSubmissionMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,12 +34,11 @@ export const PaymentConfirmatiom = () => {
       setErrors(validationErrors);
     } else {
       setErrors({});
-
       console.log('Form submitted:', formData);
       
       // Send the data to your backend
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/orders/create-order`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/confirmation-payment`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -60,15 +55,6 @@ export const PaymentConfirmatiom = () => {
         }
       } catch (error) {
         console.error('Network error:', error);
-
-      try {
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/confirmation-payment`, formData); // Send data to the backend route
-        setSubmissionMessage('Payment submitted successfully!');
-        console.log('Form submitted:', response.data);
-      } catch (error) {
-        console.error('Error submitting the form:', error);
-        setSubmissionMessage('Error submitting payment');
-
       }
     }
   };
@@ -78,13 +64,14 @@ export const PaymentConfirmatiom = () => {
     if (!data.transactionId) errors.transactionId = 'Transaction ID is required';
     if (!data.amountPaid || isNaN(data.amountPaid)) errors.amountPaid = 'Valid amount is required';
     if (!data.paymentTime) errors.paymentTime = 'Payment time is required';
+    if (!data.buyer) errors.buyer = 'Buyer ID is required'; // Validate buyer
+    if (!data.seller) errors.seller = 'Seller ID is required'; // Validate seller
     return errors;
   };
 
   return (
     <div className="form-container">
       <h2>Payment Details</h2>
-      {submissionMessage && <p className="submission-message">{submissionMessage}</p>} {/* Display submission message */}
       <form onSubmit={handleSubmit}>
         <div className="form-field">
           <label htmlFor="transactionId">Transaction ID</label>
@@ -108,7 +95,7 @@ export const PaymentConfirmatiom = () => {
             value={formData.amountPaid}
             onChange={handleChange}
             className={errors.amountPaid ? 'error' : ''}
-            disabled
+            // Removed disabled attribute to allow input
           />
           {errors.amountPaid && <span className="error-text">{errors.amountPaid}</span>}
         </div>
@@ -136,6 +123,54 @@ export const PaymentConfirmatiom = () => {
             className={errors.paymentTime ? 'error' : ''}
           />
           {errors.paymentTime && <span className="error-text">{errors.paymentTime}</span>}
+        </div>
+
+        <div className="form-field">
+          <label htmlFor="buyer">Buyer ID</label>
+          <input
+            type="text"
+            id="buyer"
+            name="buyer"
+            value={formData.buyer}
+            readOnly
+            className="read-only"
+          />
+        </div>
+
+        <div className="form-field">
+          <label htmlFor="seller">Seller ID</label>
+          <input
+            type="text"
+            id="seller"
+            name="seller"
+            value={formData.seller}
+            readOnly
+            className="read-only"
+          />
+        </div>
+
+        <div className="form-field">
+          <label htmlFor="deliveryAddress">Buyer Location</label>
+          <input
+            type="text"
+            id="deliveryAddress"
+            name="deliveryAddress"
+            value={formData.deliveryAddress}
+            readOnly
+            className="read-only"
+          />
+        </div>
+
+        <div className="form-field">
+          <label htmlFor="pickupAddress">Seller Location</label>
+          <input
+            type="text"
+            id="pickupAddress"
+            name="pickupAddress"
+            value={formData.pickupAddress}
+            readOnly
+            className="read-only"
+          />
         </div>
 
         <button type="submit" className="submit-button">Submit</button>

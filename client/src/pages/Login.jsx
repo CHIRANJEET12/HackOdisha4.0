@@ -43,9 +43,11 @@ export const Login = () => {
       // Decode the token to get userId and role
       const decodedToken = decodeJWT(token); // Decode using the manual method
       const userId = decodedToken.userId; // Extract userId from the token
+      const locationbuy = decodedToken.address;
       const userRole = decodedToken.role;   // Extract userRole from the token
 
       // Store the token and userId in localStorage
+      localStorage.setItem('location-buyer',locationbuy);
       localStorage.setItem('token', token);
       localStorage.setItem('userId', userId);
       localStorage.setItem('role', userRole);

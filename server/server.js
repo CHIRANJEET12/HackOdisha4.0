@@ -5,10 +5,6 @@ import cors from 'cors'; // Import CORS
 import authRoutes from './routes/authRoutes.js';
 import otpRoutes from './routes/otpRoutes.js';
 import productRoutes from './routes/productRoutes.js';
-
-import ordersRoute from './routes/orderRoutes.js'; 
-
-
 import comments from './routes/comments.js';
 import order from './routes/orderroute.js';
 
@@ -44,11 +40,8 @@ mongoose.connect(mongoURI)
 app.use('/', authRoutes);
 app.use('/', productRoutes);
 app.use('/', otpRoutes);
-
-app.use('/orders', ordersRoute);
-
+app.use('/', order);
 app.use('/',comments);
-app.use('/',order);
 
 
 // Define the port and start the server

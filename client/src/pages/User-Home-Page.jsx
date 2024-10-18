@@ -1,10 +1,10 @@
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDarkMode } from '../components/DarkModeContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import "../css/UserHomePage.css"
+import "../css/UserHomePage.css";
 
 export const UserHomePage = () => {
   const { darkMode } = useDarkMode();
@@ -50,10 +50,17 @@ export const UserHomePage = () => {
 
   // Function to navigate to product details
   const handleInterestedClick = (product) => {
-    const { seller, price,_id } = product;
-    navigate('/payment', { state: { sellerId: seller, amount: price , productID : _id } });
+    const { seller, price, _id, location } = product;
+
+    // Store the sellerId, amount, and productID in local storage
+    localStorage.setItem('location',location.toString());
+    localStorage.setItem('sellerId', seller.toString()); // Convert ObjectId to string
+    localStorage.setItem('amount', price.toString()); // Ensure amount is a string
+    localStorage.setItem('productID', _id.toString()); // Convert product ID to string
+    
+    // Navigate to the payment page
+    navigate('/payment', { state: { sellerId: seller, amount: price, productID: _id,location:location } });
   };
-  
 
   // Function to handle logout
   const handleLogout = () => {
@@ -113,7 +120,7 @@ export const UserHomePage = () => {
                   onClick={() => handleInterestedClick(product)}>
                  Buy Now
                 </button>
-                </div>
+              </div>
             </div>
           ))
         ) : (
@@ -123,4 +130,3 @@ export const UserHomePage = () => {
     </div>
   );
 };
-

@@ -10,10 +10,10 @@ import { encryptData } from '../utils/encryption.js';
 dotenv.config();
 
 export const registerSeller = async (req, res) => {
-    const { name,email,password, address, adharNo, licenseNo, phone, bankDetails } = req.body;
+    const { name, email, password, address, adharNo, licenseNo, phone, bankDetails } = req.body;
 
     try {
-        if (!name  || !address || !adharNo || !licenseNo || !phone || !email || !password) {
+        if (!name || !address || !adharNo || !licenseNo || !phone || !email || !password) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
 
@@ -105,7 +105,7 @@ export const registerDriver = async (req, res) => {
         } = req.body;
 
         // Validate required fields
-        if (!fullName || !password || !contactNumber || !email ) {
+        if (!fullName || !password || !contactNumber || !email) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
 
@@ -165,41 +165,34 @@ export const registerDriver = async (req, res) => {
     }
 };
 
-
 export const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        // Find the user in one of the collections
         const user = await User.findOne({ email }) || await Buyer.findOne({ email }) || await Driver1.findOne({ email });
 
-        // Check if user exists
         if (!user) {
-            console.error('User not found for email:', email);
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        // Check if password is valid
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-            console.error('Invalid password attempt for email:', email);
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        // Generate token
         const token = jwt.sign(
-            { userId: user._id, role: user.role },
+            { userId: user._id, role: user.role, address: user.address }, // Include address if needed
             process.env.JWT_SECRET,
             { expiresIn: '10d' }
         );
 
-        // Return token and user info
         res.json({
             token,
             user: {
                 id: user._id,
                 email: user.email,
-                role: user.role
+                role: user.role,
+                address: user.address, // Include address in user info if needed
             }
         });
     } catch (error) {
@@ -207,9 +200,6 @@ export const login = async (req, res) => {
         res.status(500).json({ message: 'Internal server error', details: error.message });
     }
 };
-
-
-
 // Fetch all sellers
 export const getAllSellers = async (req, res) => {
     try {

@@ -1,8 +1,8 @@
 import express from 'express';
-import {createPayment} from '../controllers/ordercontroller.js';
+import {createOrder} from '../controllers/orderController.js';
 
     const router = express.Router();
 
-    router.post('/confirmation-payment',createPayment);
+    router.post('/confirmation-payment',createOrder);
 
     export default router;
