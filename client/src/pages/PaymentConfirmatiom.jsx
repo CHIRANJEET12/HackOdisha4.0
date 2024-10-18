@@ -34,7 +34,7 @@ export const PaymentConfirmation = () => {
       
       // Send the data to your backend
       try {
-        const response = await fetch('http://localhost:3000/orders/create-order', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/orders/create-order`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
