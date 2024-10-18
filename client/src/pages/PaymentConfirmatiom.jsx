@@ -1,7 +1,8 @@
-import  { useState } from 'react';
+import { useState } from 'react';
+import axios from 'axios'; // Import Axios
 import '../css/PaymentForm.css'; // Create this CSS file for styling
 
-export const PaymentConfirmatiom= () => {
+export const PaymentConfirmatiom = () => {
   const [formData, setFormData] = useState({
     transactionId: '',
     amountPaid: '',
@@ -9,13 +10,14 @@ export const PaymentConfirmatiom= () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [submissionMessage, setSubmissionMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const validationErrors = validateForm(formData);
@@ -23,8 +25,14 @@ export const PaymentConfirmatiom= () => {
       setErrors(validationErrors);
     } else {
       setErrors({});
-      console.log('Form submitted:', formData);
-      // Handle the form submission logic (e.g., send data to backend)
+      try {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/confirmation-payment`, formData); // Send data to the backend route
+        setSubmissionMessage('Payment submitted successfully!');
+        console.log('Form submitted:', response.data);
+      } catch (error) {
+        console.error('Error submitting the form:', error);
+        setSubmissionMessage('Error submitting payment');
+      }
     }
   };
 
@@ -39,6 +47,7 @@ export const PaymentConfirmatiom= () => {
   return (
     <div className="form-container">
       <h2>Payment Details</h2>
+      {submissionMessage && <p className="submission-message">{submissionMessage}</p>} {/* Display submission message */}
       <form onSubmit={handleSubmit}>
         <div className="form-field">
           <label htmlFor="transactionId">Transaction ID</label>

@@ -6,6 +6,7 @@ import authRoutes from './routes/authRoutes.js';
 import otpRoutes from './routes/otpRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import comments from './routes/comments.js';
+import order from './routes/orderroute.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -34,6 +35,7 @@ app.use('/', authRoutes);
 app.use('/', productRoutes);
 app.use('/', otpRoutes);
 app.use('/',comments);
+app.use('/',order);
 
 // Define the port and start the server
 const PORT = process.env.PORT || 3000;
