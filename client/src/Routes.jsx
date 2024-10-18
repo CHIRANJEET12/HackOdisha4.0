@@ -12,6 +12,7 @@ import ProductDetailsPage from './pages/ProductDetailsPage '
 import PaymentConfirmatiom from './pages/PaymentConfirmatiom';
 import { PaymentPage } from './pages/PaymentPage';
 import OrderConfirmation from './pages/OrderConfirmation';
+import OrderList from './pages/FetchOrders';
 
 //ABC
 
@@ -23,6 +24,7 @@ const AppRoutes = () => {
       <Route path="/create-post" element={<InputForm/>} />
       <Route path="/product/:id" element={<ProductDetailsPage />} />
       <Route path="/login" element={<Login/>} />
+      <Route path="/fetch-orders" element={<OrderList/>} />
       <Route path="/regDel" element={<DeliveryForm/>} />
       <Route path="/regBuyer" element={<BuyerForm/>} />
       <Route path="/regSeller" element={<SellerForm/>} />

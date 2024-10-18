@@ -7,6 +7,7 @@ import otpRoutes from './routes/otpRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import comments from './routes/comments.js';
 import order from './routes/orderroute.js';
+import fetchOrders from './routes/fetchOrderRoute.js';
 
 import dotenv from 'dotenv';
 
@@ -42,6 +43,7 @@ app.use('/', productRoutes);
 app.use('/', otpRoutes);
 app.use('/', order);
 app.use('/',comments);
+app.use('/',fetchOrders);
 
 
 // Define the port and start the server
