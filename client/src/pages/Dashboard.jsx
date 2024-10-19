@@ -14,6 +14,9 @@ const Dashboard = () => {
     password: 'password123',
   });
 
+  // State for products sold
+  const [soldProducts, setSoldProducts] = useState([]);
+
   // State to manage which item is being edited
   const [editing, setEditing] = useState({ section: null, key: null, value: '' });
 
@@ -31,18 +34,60 @@ const Dashboard = () => {
 
   const handleSave = () => {
     const updatedLoginData = { ...loginData, [editing.key]: editing.value };
+    
+    // Save updated data to state
     setLoginData(updatedLoginData);
-    localStorage.setItem('loginData', JSON.stringify(updatedLoginData)); // Save to local storage
-    setEditing({ section: null, key: null, value: '' }); // Reset editing state
+    
+    // Save the updated data to localStorage
+    localStorage.setItem('loginData', JSON.stringify(updatedLoginData));
+    
+    // Reset editing state
+    setEditing({ section: null, key: null, value: '' });
   };
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       handleSave();
     } else if (e.key === 'Escape') {
-      setEditing({ section: null, key: null, value: '' }); // Reset on escape
+      setEditing({ section: null, key: null, value: '' });
     }
   };
+
+  // Load data from local storage on component mount
+  useEffect(() => {
+    const storedLoginData = localStorage.getItem('loginData');
+    
+    if (storedLoginData) {
+      setLoginData(JSON.parse(storedLoginData));
+    } else {
+      // Alternatively, load each field individually from localStorage if stored separately
+      const storedUsername = localStorage.getItem('name');
+      const storedEmail = localStorage.getItem('email');
+      const storedPhoneNumber = localStorage.getItem('phone');
+      const storedPassword = localStorage.getItem('password');
+      
+      setLoginData({
+        username: storedUsername || 'user123',
+        email: storedEmail || 'user@example.com',
+        phoneNumber: storedPhoneNumber || '123-456-7890',
+        password: storedPassword || 'kept secret for security reasons',
+      });
+    }
+
+    // Load sold products from local storage
+    const storedSoldProducts = localStorage.getItem('soldProducts');
+    if (storedSoldProducts) {
+      setSoldProducts(JSON.parse(storedSoldProducts));
+    }else {
+      const productName = localStorage.getItem('productName');
+      const productPrice = localStorage.getItem('productPrice');
+
+      setSoldProducts({
+        productName: productName || 'no orders',
+        productPrice: productPrice || 'N/A',
+      });
+    }
+  }, []);
 
   const sections = [
     {
@@ -53,6 +98,14 @@ const Dashboard = () => {
         { label: 'Email', value: loginData.email, editable: true, key: 'email' },
         { label: 'Phone Number', value: loginData.phoneNumber, editable: true, key: 'phoneNumber' },
         { label: 'Change Password', value: loginData.password, editable: true, key: 'password' },
+      ],
+    },
+    {
+      key: 'orders',
+      title: 'Orders',
+      items: [
+        { label: 'productName', value: soldProducts.productName, editable: true, key: 'productName' },
+        { label: 'productPrice', value: soldProducts.productPrice, editable: true, key: 'productPrice' },
       ],
     },
     {
@@ -67,15 +120,6 @@ const Dashboard = () => {
       ],
     },
   ];
-
-  // Load data from local storage on component mount
-  useEffect(() => {
-    const storedLoginData = localStorage.getItem('loginData');
-    
-    if (storedLoginData) {
-      setLoginData(JSON.parse(storedLoginData));
-    }
-  }, []);
 
   return (
     <div className={`dashboard-container ${darkMode ? 'dark' : ''}`}>
@@ -114,27 +158,7 @@ const Dashboard = () => {
                     {section.items.map((item, idx) => (
                       <li key={idx}>
                         <span>{item.label}: </span>
-                        {item.detail && <span>{item.detail}</span>}
-                        {item.editable && editing.section === section.key && editing.key === item.key ? (
-                          <>
-                            <input
-                              type="text"
-                              value={editing.value}
-                              onChange={handleChange}
-                              onBlur={handleSave} // Save on blur
-                              onKeyDown={handleKeyDown}
-                              placeholder={`Enter ${item.label}`}
-                            />
-                            <button className={darkMode ? 'dark-mode-button' : 'light-mode-button'} onClick={handleSave}>Save</button>
-                          </>
-                        ) : (
-                          <span>{item.value}</span>
-                        )}
-                        {item.editable && !(editing.section === section.key && editing.key === item.key) && ( // Show Edit button if not currently editing
-                          <button className={darkMode ? 'dark-mode-button' : 'light-mode-button'} onClick={() => handleEdit(section.key, item.key, item.value)}>
-                            Edit
-                          </button>
-                        )}
+                        <span>{item.value}</span>
                       </li>
                     ))}
                   </ul>
