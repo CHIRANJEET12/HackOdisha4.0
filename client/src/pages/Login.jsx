@@ -37,30 +37,35 @@ export const Login = () => {
     setError(null);
 
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/login`, credentials);
-      const { token } = response.data;
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/login`, credentials);
+        const { token } = response.data;
 
-      // Decode the token to get userId and role
-      const decodedToken = decodeJWT(token); // Decode using the manual method
-      const userId = decodedToken.userId; // Extract userId from the token
-      const locationbuy = decodedToken.address;
-      const userRole = decodedToken.role;   // Extract userRole from the token
+        // Decode the token
+        const decodedToken = decodeJWT(token);
+        console.log("Decoded Token:", decodedToken);  // Debugging log to check contents
 
-      // Store the token and userId in localStorage
-      localStorage.setItem('location-buyer',locationbuy);
-      localStorage.setItem('token', token);
-      localStorage.setItem('userId', userId);
-      localStorage.setItem('role', userRole);
+        const name = decodedToken.name;  
+        const email = decodedToken.email;  
+        const phone = decodedToken.phone;  
 
-      // Navigate to the user's homepage
-      navigate('/Userhomepage');
+        localStorage.setItem('name', name);
+        localStorage.setItem('email', email);
+        localStorage.setItem('phone', phone);
+
+        localStorage.setItem('token', token);
+        localStorage.setItem('userId', decodedToken.userId);
+        localStorage.setItem('role', decodedToken.role);
+
+        // Navigate to the user's homepage
+        navigate('/Userhomepage');
     } catch (err) {
-      console.error('Login error:', err);
-      setError('Failed to log in. Please check your credentials.');
+        console.error('Login error:', err);
+        setError('Failed to log in. Please check your credentials.');
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+};
+
 
   return (
     <div className="container mt-5">

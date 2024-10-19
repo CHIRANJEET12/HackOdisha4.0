@@ -164,35 +164,42 @@ export const registerDriver = async (req, res) => {
         });
     }
 };
-
 export const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const user = await User.findOne({ email }) || await Buyer.findOne({ email }) || await Driver1.findOne({ email });
+        // Check the three models for the user
+        const user = await User.findOne({ email }) || 
+                     await Buyer.findOne({ email }) || 
+                     await Driver1.findOne({ email });
 
         if (!user) {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
+        // Validate the password
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
+        // Create JWT token, include name, phone, and address if needed
         const token = jwt.sign(
-            { userId: user._id, role: user.role, address: user.address }, // Include address if needed
+            { userId: user._id,email:user.email, role: user.role, address: user.address, name: user.name, phone: user.phone },
             process.env.JWT_SECRET,
             { expiresIn: '10d' }
         );
 
+        // Return the token and user details
         res.json({
             token,
             user: {
                 id: user._id,
                 email: user.email,
                 role: user.role,
-                address: user.address, // Include address in user info if needed
+                address: user.address, 
+                name: user.name,
+                phone: user.phone,
             }
         });
     } catch (error) {
@@ -200,6 +207,7 @@ export const login = async (req, res) => {
         res.status(500).json({ message: 'Internal server error', details: error.message });
     }
 };
+
 // Fetch all sellers
 export const getAllSellers = async (req, res) => {
     try {
