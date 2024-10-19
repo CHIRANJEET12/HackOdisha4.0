@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDarkMode } from '../components/DarkModeContext';
-import "../css/InputForm.css" 
+import "../css/InputForm.css"; 
 
 function InputForm() {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ function InputForm() {
     location: '',
     category: '',
     yearsUsed: '',
-    email: '', // Added email field
+    email: '',
     exampleCheck: false,
   });
   const [loading, setLoading] = useState(false); 
@@ -33,7 +33,6 @@ function InputForm() {
     setLoading(true);
     setError(null);
 
-    // Retrieve token from localStorage or sessionStorage
     const token = localStorage.getItem('token');
     if (!token) {
       setError('Authorization failed. Please log in again.');
@@ -51,6 +50,11 @@ function InputForm() {
           },
         }
       );
+
+      // Save product name and price to local storage
+      localStorage.setItem('productName', formData.name);
+      localStorage.setItem('productPrice', formData.price);
+
       console.log('Response:', response.data);
       alert('Product posted successfully');
       navigate('/Userhomepage');
@@ -105,7 +109,7 @@ function InputForm() {
               value={formData.price}
               onChange={handleChange}
               required
-              min="0" // Prevent negative values
+              min="0"
             />
           </div>
         </div>
@@ -138,7 +142,6 @@ function InputForm() {
             <option value="textbook">Textbook</option>
             <option value="others">Others</option>
           </select>
-
         </div>
 
         {/* No. of Years Used */}
@@ -182,7 +185,7 @@ function InputForm() {
           <label className="form-check-label" htmlFor="exampleCheck1">Check me out</label>
         </div>
 
-        <button type="submit" className={darkMode ? 'dark-mode-button' : 'light-mode-button'}disabled={loading}>
+        <button type="submit" className={darkMode ? 'dark-mode-button' : 'light-mode-button'} disabled={loading}>
           {loading ? 'Submitting...' : 'Submit'}
         </button>
 
